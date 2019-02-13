@@ -27,7 +27,7 @@ single_test <- function(n,beta_treat,sd,CI_width){
 
 # Obtain power if sample size is 150, true beta = 2, sd = 3, and CI width threshold of interest = 2
   iters <- 10000
-  mean(pbreplicate(iters,single_test(n=150,beta_treat=2,sd=3,CI_width=2)))
+  mean(replicate(iters,single_test(n=150,beta_treat=2,sd=3,CI_width=2)))
 
 # Same as above, but wrapped in a function
 power_test <- function(iters,n,beta_treat,sd,CI_width){
@@ -40,11 +40,11 @@ power_test <- function(iters,n,beta_treat,sd,CI_width){
 }
 
 # Check power at different sample sizes
-  # Generates a vector of every 10th n from 100:200
+  # Generate a vector of every 10th n from 100:200
     ns <- seq(100,200,10) 
   # Run our power test at each of those ns
     tests <- pblapply(ns,function(x) power_test(iters=1000,n=x,beta_treat=2,sd=3,CI_width=2))
-  # Puts them all together int a dataset
+  # Put them all together int a dataset
     df <- do.call("rbind",tests)
   # Chart it!
     ggplot(data=df,aes(x=n,y=power)) +
