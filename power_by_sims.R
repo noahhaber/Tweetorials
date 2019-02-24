@@ -67,6 +67,24 @@ power_test <- function(iters,n,beta_treat,sd,CI_width){
                       sd=params$sd,
                       CI_width=params$CI_width,
                       SIMPLIFY = FALSE) # Ensures that we get a list output, just like lapply
+    
+    tests_list <- list()
+    counter <- 1
+    for (n in seq(100,200,5)){
+      for (sd in seq(1,5,.1)){
+        tests_list[[counter]] <- power_test(100,n,2,sd,2)
+        counter <- counter + 1
+      }
+    }
+      tests <- pbmapply(power_test,
+                      params$iters,
+                      n=params$n,
+                      beta_treat=params$beta_treat,
+                      sd=params$sd,
+                      CI_width=params$CI_width,
+                      SIMPLIFY = FALSE) # Ensures that we get a list output, just like lapply
+    
+    
   # Combine them
     df <- do.call("rbind",tests)
   # Plot them
